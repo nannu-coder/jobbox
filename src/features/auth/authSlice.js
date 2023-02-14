@@ -8,8 +8,10 @@ import {
 import auth from "../../firebase/firebase.config";
 
 const initialState = {
-  email: "",
-  role: "",
+  user: {
+    email: "",
+    role: "",
+  },
   isLoading: true,
   isError: false,
   error: "",
@@ -52,7 +54,7 @@ const authSlice = createSlice({
       state.email = "";
     },
     setUser: (state, action) => {
-      state.email = action.payload;
+      state.user.email = action.payload;
       state.isLoading = false;
     },
     toggleLoading: (state) => {
@@ -70,12 +72,12 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.error = "";
-        state.email = action.payload;
+        state.user.email = action.payload;
       })
       .addCase(createUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.email = "";
+        state.user.email = "";
         state.error = action.error.message;
       });
 
@@ -89,12 +91,12 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.error = "";
-        state.email = action.payload;
+        state.user.email = action.payload;
       })
       .addCase(signinUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.email = "";
+        state.user.email = "";
         state.error = action.error.message;
       });
 
@@ -108,12 +110,12 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.error = "";
-        state.email = action.payload;
+        state.user.email = action.payload;
       })
       .addCase(googleSignin.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.email = "";
+        state.user.email = "";
         state.error = action.error.message;
       });
   },

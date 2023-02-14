@@ -4,7 +4,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react";
 import auth from "./firebase/firebase.config";
 import { useDispatch } from "react-redux";
-import { setUser, toggleLoading } from "./features/auth/authSlice";
+import { getUser, setUser, toggleLoading } from "./features/auth/authSlice";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -14,7 +14,7 @@ function App() {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        dispatch(setUser(user.email));
+        dispatch(getUser(user.email));
       } else {
         dispatch(toggleLoading());
       }

@@ -13,9 +13,12 @@ const Login = () => {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { email, isLoading, isError, error } = useSelector(
-    (state) => state.auth
-  );
+  const {
+    user: { email },
+    isLoading,
+    isError,
+    error,
+  } = useSelector((state) => state.auth);
 
   const onSubmit = (data) => {
     const { email, password } = data;

@@ -46,12 +46,23 @@ export const googleSignin = createAsyncThunk("auth/googleSignin", async () => {
   return data.user.email;
 });
 
+export const getUser = createAsyncThunk("auth/getUser", async (email) => {
+  const res = await fetch(`http://localhost:5000/user/${email}`);
+  const data = await res.json();
+
+  if (data.status) {
+    return data;
+  }
+
+  return email;
+});
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
     logout: (state) => {
-      state.email = "";
+      state.user.email = "";
     },
     setUser: (state, action) => {
       state.user.email = action.payload;
@@ -116,6 +127,29 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.user.email = "";
+        state.error = action.error.message;
+      });
+
+    builder
+      .addCase(getUser.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.error = "";
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.error = "";
+        if (action.payload.status) {
+          state.user = action.payload.data;
+        } else {
+          state.user.email = action.payload;
+        }
+      })
+      .addCase(getUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.user = "";
         state.error = action.error.message;
       });
   },
